@@ -1,0 +1,10 @@
+ResourceID|ResourceName|ResourceType|Availability
+R101|Study Room A|StudyRoom|Available
+R102|Study Room B|StudyRoom|Available
+R201|Dell Laptop 1|Laptop|Available
+R202|Dell Laptop 2|Laptop|Available
+R203|TI-84 Calculator|Calculator|Available
+R204|TI-84 Plus CE Calculator|Calculator|Available
+R301|Microscope Set|LabEquipment|Available
+R401|Tutor - Algebra|Tutoring|Available
+R402|Tutor - Calculus|Tutoring|Available
