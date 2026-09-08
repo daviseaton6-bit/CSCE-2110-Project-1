@@ -1,10 +1,20 @@
-ResourceID|ResourceName|ResourceType|Availability
-R101|Study Room A|StudyRoom|Available
-R102|Study Room B|StudyRoom|Available
-R201|Dell Laptop 1|Laptop|Available
-R202|Dell Laptop 2|Laptop|Available
-R203|TI-84 Calculator|Calculator|Available
-R204|TI-84 Plus CE Calculator|Calculator|Available
-R301|Microscope Set|LabEquipment|Available
-R401|Tutor - Algebra|Tutoring|Available
-R402|Tutor - Calculus|Tutoring|Available
+R101|Study Room 101|Study Room|Available
+R102|Study Room 102|Study Room|Available
+R103|Study Room 103|Study Room|Unavailable
+R104|Study Room 104|Study Room|Available
+R105|Laptop 01|Laptop|Available
+R106|Laptop 02|Laptop|Unavailable
+R107|Laptop 03|Laptop|Available
+R108|Laptop 04|Laptop|Available
+R109|Calculator 01|Calculator|Unavailable
+R110|Calculator 02|Calculator|Available
+R111|3D Printer|Lab Equipment|Available
+R112|Oscilloscope|Lab Equipment|Unavailable
+R113|Arduino Kit|Lab Equipment|Available
+R114|Math Tutoring|Tutoring Appointment|Available
+R115|CS Tutoring|Tutoring Appointment|Unavailable
+R116|Study Room 201|Study Room|Available
+R117|Laptop 05|Laptop|Available
+R118|Calculator 03|Calculator|Unavailable
+R119|VR Headset|Lab Equipment|Available
+R120|Physics Tutoring|Tutoring Appointment|Available
