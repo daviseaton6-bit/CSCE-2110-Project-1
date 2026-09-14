@@ -16,11 +16,26 @@ struct Reservation
     string date;
 };
 
+// check if empty 
+void validateReservation(const Reservation& r)
+{
+    if (r.resID.empty())
+        throw invalid_argument("Reservation ID cannot be empty.");
+    if (r.stuID.empty())
+        throw invalid_argument("Student ID cannot be empty.");
+    if (r.stuName.empty())
+        throw invalid_argument("Student name cannot be empty.");
+    if (r.resourceID.empty())
+        throw invalid_argument("Resource ID cannot be empty.");
+    if (r.date.empty())
+        throw invalid_argument("Date cannot be empty.");
+}
 
 
 //takes queue by reference
 void addToWatingList(queue<Reservation>& waitingList, const Reservation& r) 
 {
+    validateReservation(r);
     waitingList.push(r);
 }
 
@@ -29,8 +44,7 @@ Reservation processNext(queue<Reservation>& waitingList)
 {
     if (waitingList.empty()) 
     {
-        cout << "No reservations in the queue." << endl;
-        return {"", "", "", "", ""}; //return an empty reservation
+        throw runtime_error("No reservations in the list");
     }
     Reservation nextReservation = waitingList.front();
     waitingList.pop();
@@ -41,6 +55,11 @@ Reservation processNext(queue<Reservation>& waitingList)
 void displayWaitingList(queue<Reservation> waitingList)
 {
     cout << "\n=== Waiting List ===\n";
+    if (waitingList.empty())
+    {
+        cout << "(empty)\n";
+        return;
+    }
     while (!waitingList.empty())
     {
         Reservation r = waitingList.front();
@@ -51,6 +70,7 @@ void displayWaitingList(queue<Reservation> waitingList)
 
 void recordCancellation(stack<Reservation>& history, const Reservation& r)
 {
+    validateReservation(r);
     history.push(r);
 }
 
@@ -71,6 +91,11 @@ Reservation undo(stack<Reservation>& history)
 void displayHistory(stack<Reservation> history) 
 {
     cout << "\n=== Cancellation History ===\n";
+    if (history.empty())
+    {
+        cout << "(empty)\n";
+        return;
+    }
     while (!history.empty())
     {
         Reservation r = history.top();
