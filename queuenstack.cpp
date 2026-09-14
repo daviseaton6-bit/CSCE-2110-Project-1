@@ -40,7 +40,7 @@ Reservation processNext(queue<Reservation>& waitingList)
 //Display without modifying the queue
 void displayWaitingList(queue<Reservation> waitingList)
 {
-    cout << "\n--- Waiting List ---\n";
+    cout << "\n=== Waiting List ===\n";
     while (!waitingList.empty())
     {
         Reservation r = waitingList.front();
@@ -70,7 +70,7 @@ Reservation undo(stack<Reservation>& history)
 //Display wihtout effecting the stack
 void displayHistory(stack<Reservation> history) 
 {
-    cout << "\n--- Cancellation History ---\n";
+    cout << "\n=== Cancellation History ===\n";
     while (!history.empty())
     {
         Reservation r = history.top();
@@ -82,7 +82,7 @@ void displayHistory(stack<Reservation> history)
 
 
 
-
+//loading reservation vector, not needed for the queue or stack as i will leave both empty until the user adds reservations, idk why i made it honestly
 vector<Reservation> loadReservations(const string& filename) 
 {
     vector<Reservation> reservations;
