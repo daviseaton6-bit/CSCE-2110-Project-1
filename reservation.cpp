@@ -107,4 +107,5 @@ void createReservation()
         resourceID,
         reservationDate
         );
-    node* newNode = new Node(newReservation);
+    Node* newNode = new Node(newReservation);
+cout << "Reservation created Successfully! " << endl;
