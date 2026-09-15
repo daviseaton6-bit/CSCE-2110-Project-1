@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <ReservationManager.h>
 using namespace std;
 
 
