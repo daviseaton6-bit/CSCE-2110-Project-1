@@ -18,5 +18,6 @@ vector<Resource> loadResources(const string& filename);
 void displayAll(const vector<Resource>& resources);
 
 void displayAvailability(const vector<Resource>& resources);
-
+bool isResourceAvailable(const vector<Resource>& resources,
+    const string& resourceID);
 #endif

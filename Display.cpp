@@ -56,3 +56,16 @@ void displayAvailability(const vector<Resource>& resources) {
     }
 }
 
+bool isResourceAvailable(const vector<Resource>& resources,
+                         const string& resourceID)
+{
+    for (const auto& r : resources)
+    {
+        if (r.id == resourceID)
+        {
+            return r.availability == "Available";
+        }
+    }
+
+    return false;
+}

@@ -12,21 +12,21 @@ using namespace std;
 // check if empty 
 void validateReservation(const Reservation& r)
 {
-    if (r.resID.empty())
+    if (r.reservationID == 0)
         throw invalid_argument("Reservation ID cannot be empty.");
-    if (r.stuID.empty())
+    if (r.studentID == 0)
         throw invalid_argument("Student ID cannot be empty.");
-    if (r.stuName.empty())
+    if (r.studentName.empty())
         throw invalid_argument("Student name cannot be empty.");
     if (r.resourceID.empty())
         throw invalid_argument("Resource ID cannot be empty.");
-    if (r.date.empty())
-        throw invalid_argument("Date cannot be empty.");
+    if (r.reservationDate.empty())
+        throw invalid_argument("Reservation date cannot be empty.");
 }
 
 
 //takes queue by reference
-void addToWaitngList(queue<Reservation>& waitingList, const Reservation& r) 
+void addToWaitingList(queue<Reservation>& waitingList, const Reservation& r) 
 {
     validateReservation(r);
     waitingList.push(r);
@@ -56,7 +56,9 @@ void displayWaitingList(queue<Reservation> waitingList)
     while (!waitingList.empty())
     {
         Reservation r = waitingList.front();
-        cout << r.stuName << " (ID: " << r.stuID << ") is waiting for resource " << r.resourceID << endl;
+        cout << r.studentName
+     << " (ID: " 
+     << r.studentID << ") is waiting for resource " << r.resourceID << endl;
         waitingList.pop();
     }
 }
@@ -73,10 +75,14 @@ Reservation undo(stack<Reservation>& history)
     if (history.empty())
     {
         cout << "No cancellations to undo" << endl;
-        return {"", "", "", "", ""}; //return empty reservation
+
+        Reservation emptyReservation;
+        return emptyReservation;
     }
-    Reservation last = history.top(); 
+
+    Reservation last = history.top();
     history.pop();
+
     return last;
 }
 
@@ -92,7 +98,7 @@ void displayHistory(stack<Reservation> history)
     while (!history.empty())
     {
         Reservation r = history.top();
-        cout << r.stuName << " -> " << r.resourceID << endl;
+        cout << r.studentName << " (ID: " << r.studentID << ") -> " << r.resourceID << endl;
         history.pop();
     }
 }
@@ -101,28 +107,48 @@ void displayHistory(stack<Reservation> history)
 
 
 //loading reservation vector, not needed for the queue or stack as i will leave both empty until the user adds reservations, idk why i made it honestly
-vector<Reservation> loadReservations(const string& filename) 
+vector<Reservation> loadReservations(const string& filename)
 {
     vector<Reservation> reservations;
+
     ifstream file(filename);
+
     if (!file.is_open())
     {
         cout << "Error opening file: " << filename << endl;
         return reservations;
     }
+
     string line;
+
     while (getline(file, line))
     {
         stringstream ss(line);
-        string resID, stuID, studName, ressourceID, date;
+
+        string resID;
+        string stuID;
+        string studName;
+        string ressourceID;
+        string date;
+
         getline(ss, resID, '|');
         getline(ss, stuID, '|');
         getline(ss, studName, '|');
         getline(ss, ressourceID, '|');
         getline(ss, date, '|');
-        //add the reservation to the vector
-        reservations.push_back({resID, stuID, studName, ressourceID, date});
+
+        Reservation r;
+
+        r.reservationID = stoi(resID);
+        r.studentID = stoi(stuID);
+        r.studentName = studName;
+        r.resourceID = ressourceID;
+        r.reservationDate = date;
+
+        reservations.push_back(r);
     }
+
     file.close();
+
     return reservations;
 }

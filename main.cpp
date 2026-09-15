@@ -5,15 +5,18 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
+#include <limits>
+#include "Reservation.h"
 #include "Display.h"
 #include "QueueNStack.h"
+
 using namespace std;
 
 int main()
 {
     vector<Resource> resources = loadResources("resources.txt");
+    ReservationManager manager;
     queue<Reservation> waitingList;
-    stack<Reservation> cancellationHistory;
     int choice = 0;
 
     while (choice != 11)
@@ -46,17 +49,17 @@ int main()
 
         case 3:
             cout << "Create Reservation selected.\n";
-            // createReservation();
+           manager.createReservation(resources, waitingList);
             break;
 
         case 4:
             cout << "Cancel Reservation selected.\n";
-            // cancelReservation();
+            manager.cancelReservation();
             break;
 
         case 5:
             cout << "Display Active Reservations selected.\n";
-            // displayReservations();
+            manager.viewReservations();
             break;
 
         case 6:
@@ -75,21 +78,12 @@ int main()
             break;
 
         case 9:
-{
-Reservation restored = undo(cancellationHistory);
-if (!restored.resID.empty())
-{
-cout << "Restored: "
-<< restored.stuName
-<< endl;
-}
-break;
-
-}
+    manager.undoCancellation();
+    break;
 
         case 10:
             cout << "Display Cancellation History selected.\n";
-            displayHistory(cancellationHistory);
+            manager.displayCancellationHistory();
             break;
 
         case 11:
@@ -103,8 +97,8 @@ break;
         if (choice != 11)
         {
             cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
+cin.ignore(numeric_limits<streamsize>::max(), '\n');
+cin.get();
         }
     }
 

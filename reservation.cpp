@@ -1,69 +1,47 @@
-// Campus resources reservation system.cpp : 
-//
-
+//campus reservation system
+#include "Reservation.h"
+#include "Display.h"
+#include "QueueNStack.h"
 #include <iostream>
 #include <string>
 #include <stack>
+
+
 using namespace std;
 
-//Reservation class
-class Reservation
+Reservation::Reservation()
 {
-public:
-    int reservationID;
-    int studentID;
-    string studentName;
-    string resourceID;
-    string reservationDate;
+    reservationID = 0;
+    studentID = 0;
+    studentName = "";
+    resourceID = "";
+    reservationDate = "";
+}
 
-    Reservation()
-    {
-        reservationID = 0;
-        studentID = 0;
-        studentName = " ";
-        resourceID = " ";
-        reservationDate = " ";
-    }
-    void display()
-    {
-        cout << "Reservation ID: " << reservationID << endl;
-        cout << "Student ID: " << studentID << endl;
-        cout << "Student Name: " << studentName << endl;
-        cout << "Resource ID: " << resourceID << endl;
-        cout << "Reservation Date: " << reservationDate << endl;
-    }
-};
-
-//linked list
-struct Node
+void Reservation::display()
 {
-    Reservation reservation;
-    Node* next;
+    cout << "Reservation ID: " << reservationID << endl;
+    cout << "Student ID: " << studentID << endl;
+    cout << "Student Name: " << studentName << endl;
+    cout << "Resource ID: " << resourceID << endl;
+    cout << "Reservation Date: " << reservationDate << endl;
+}
 
-    Node(Reservation r)
-    {
-        reservation = r;
-        next = nullptr;
-    }
-};
-
-//Reservation Manager
-class ReservationManager
+Node::Node(Reservation r)
 {
-private:
-        Node* head;
-    stack<Reservation> cancelledReservations;
+    reservation = r;
+    next = nullptr;
+}
 
-public:
-    // constructor
-    ReservationManager()
-    {
-        head = nullptr;
-    }
-};
+ReservationManager::ReservationManager()
+{
+    head = nullptr;
+}
 
 //create reservation
-void createReservation(int reservationID)
+void ReservationManager::createReservation(
+    const vector<Resource>& resources,
+    queue<Reservation>& waitingList)
 {
     int reservationID;
     int studentID;
@@ -71,25 +49,27 @@ void createReservation(int reservationID)
     string resourceID;
     string reservationDate;
 
-    cout << "\n ===== create reservation =====" << endl;
+    cout << "\n===== Create Reservation =====" << endl;
     cout << "Enter Reservation ID: ";
     cin >> reservationID;
-
-    //check if ID exists
 
     Node* current = head;
 
     while (current != nullptr)
     {
         if (current->reservation.reservationID == reservationID)
-        
-            cout << " This reservation ID is already in the system." << endl;
+        {
+            cout << "This reservation ID already exists." << endl;
             return;
-        
+        }
 
+        current = current->next;
     }
+
     cout << "Enter Student ID: ";
     cin >> studentID;
+
+    cin.ignore();
 
     cout << "Enter Student Name: ";
     getline(cin, studentName);
@@ -100,31 +80,43 @@ void createReservation(int reservationID)
     cout << "Enter Reservation Date: ";
     getline(cin, reservationDate);
 
-    //create new reservation
-    Reservation newReservation(
-        reservationID,
-        studentID,
-        studentName,
-        resourceID,
-        reservationDate
-    );
+    Reservation newReservation;
 
-    //create new node
+    newReservation.reservationID = reservationID;
+    newReservation.studentID = studentID;
+    newReservation.studentName = studentName;
+    newReservation.resourceID = resourceID;
+    newReservation.reservationDate = reservationDate;
 
+    if (isResourceAvailable(resources, resourceID))
+{
     Node* newNode = new Node(newReservation);
 
-    cout << "Reservation created Successfully! " << endl;
+    newNode->next = head;
+    head = newNode;
+
+    cout << "Reservation created successfully!" << endl;
+}
+else
+{
+    cout << "Resource is unavailable." << endl;
+
+    addToWaitingList(waitingList, newReservation);
+
+    cout << "Added to waiting list." << endl;
+}
 }
     //Display the reservations
-void viewReservations()
+void ReservationManager::viewReservations()
 {
     cout << "\n=== Current Reservations ====" << endl;
 
     if (head == nullptr)
     {
-        cout << " There are no reservations. " << endl;
+        cout << "There are no reservations." << endl;
         return;
     }
+
     Node* current = head;
 
     while (current != nullptr)
@@ -133,77 +125,119 @@ void viewReservations()
         current = current->next;
     }
 }
-
     //search for a reservation
-     void searchReservation()
+void ReservationManager::searchReservation()
+{
+    int reservationID;
+
+    cout << "\n===== Search Reservation =====\n";
+    cout << "Enter Reservation ID: ";
+    cin >> reservationID;
+
+    Node* current = head;
+
+    while (current != nullptr)
+    {
+        if (current->reservation.reservationID == reservationID)
         {
-            int reservationID;
+            cout << "\nReservation Found!\n";
+            current->reservation.display();
+            return;
+        }
 
-            cout << "\n===== Search Reservation =====" << endl;
+        current = current->next;
+    }
 
-            cout << " Enter Reservation ID: ";
-            cin >> reservationID;
-
-            Node* current = head;
-            
-            while (current != nullptr)
-            {
-                if (current->reservation.reservationID == reservationID)
-                {
-                    cout << "\nReservation Found!" << endl;
-                    current->reservation.display();
-                    return;
-                }
-
-                current = current->next;
-
-            }
-
-            cout << "Reservation not found. " << endl;
-
-     }
+    cout << "Reservation not found.\n";
+}
 
      // cancel a reservation
-     void cancelReservation()
-     {
-         int reservationID;
-
-         cout << "\n===== Cancel Reservation =====" << endl;
-
-         cout << " Enter Reservation ID: ";
-         cin >> reservationID;
-
-         Node* current = head;
-         Node* previous = nullptr;
-
-         //search for the reservation
-         while (current != nullptr)
-         {
-             if (current->reservation.reservationID == reservationID)
-                 break;
-
-             previous = current;
-             current = current->next;
-         }
-
-
-     }
-        
-       
-        
-
-
-
-
-
-
-int main()
+    void ReservationManager::cancelReservation()
 {
-    
-    ReservationManager manager;
-    Reservation newReservation;
-    
-   
+    int reservationID;
+
+    cout << "\n===== Cancel Reservation =====" << endl;
+    cout << "Enter Reservation ID: ";
+
+    cin >> reservationID;
+
+    Node* current = head;
+    Node* previous = nullptr;
+
+    while (current != nullptr)
+    {
+        if (current->reservation.reservationID == reservationID)
+        {
+            break;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == nullptr)
+    {
+        cout << "Reservation not found." << endl;
+        return;
+    }
+
+    cancelledReservations.push(current->reservation);
+
+    if (previous == nullptr)
+    {
+        head = current->next;
+    }
+    else
+    {
+        previous->next = current->next;
+    }
+
+    delete current;
+
+    cout << "Reservation cancelled successfully." << endl;
 }
+        
+       void ReservationManager::undoCancellation()
+{
+    if (cancelledReservations.empty())
+    {
+        cout << "No cancellations to undo." << endl;
+        return;
+    }
+
+    Reservation restored = cancelledReservations.top();
+    cancelledReservations.pop();
+
+    Node* newNode = new Node(restored);
+
+    newNode->next = head;
+    head = newNode;
+
+    cout << "Reservation restored successfully." << endl;
+}
+ 
+void ReservationManager::displayCancellationHistory()
+{
+    cout << "\n=== Cancellation History ===\n";
+
+    if (cancelledReservations.empty())
+    {
+        cout << "No cancelled reservations." << endl;
+        return;
+    }
+
+    stack<Reservation> temp = cancelledReservations;
+
+    while (!temp.empty())
+    {
+        temp.top().display();
+        cout << endl;
+
+        temp.pop();
+    }
+}
+
+
+
 
 

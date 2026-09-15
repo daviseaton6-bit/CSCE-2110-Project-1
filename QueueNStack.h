@@ -1,20 +1,13 @@
 #ifndef QUEUENSTACK_H
 #define QUEUENSTACK_H
-
+#include "Reservation.h"
 #include <queue>
 #include <stack>
 #include <string>
 
 using namespace std;
 
-struct Reservation
-{
-    string resID;
-    string stuID;
-    string stuName;
-    string resourceID;
-    string date;
-};
+
 
 void addToWaitingList(queue<Reservation>& waitingList,
                       const Reservation& r);
