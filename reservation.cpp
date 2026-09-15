@@ -48,7 +48,7 @@ struct Node
 };
 
 //Reservation Manager
-class ReservationManager
+class ReservationManager(int reservation
 {
 private:
         Node* head;
@@ -63,7 +63,7 @@ public:
 };
 
 //create reservation
-void createReservation()
+void createReservation(int reservationID)
 {
     int reservationID;
     int studentID;
@@ -109,3 +109,75 @@ void createReservation()
         );
     Node* newNode = new Node(newReservation);
 cout << "Reservation created Successfully! " << endl;
+    //Display the reservations
+void viewReservations()
+{
+    cout << "\n=== Current Reservations ====" << endl;
+
+    if (head == nullptr)
+    {
+        cout << " There are no reservations. " << endl;
+        return;
+    }
+    Node* current = head;
+
+    while (current != nullptr)
+    {
+        current->reservation.display();
+        current = current->next;
+    }
+}
+
+    //search for a reservation
+     void searchReservation()
+        {
+            int reservationID;
+
+            cout << "\n===== Search Reservation =====" << endl;
+
+            cout << " Enter Reservation ID: ";
+            cin >> reservationID;
+
+            Node* current = head;
+            
+            while (current != nullptr)
+            {
+                if (current->reservation.reservationID == reservationID)
+                {
+                    cout << "\nReservation Found!" << endl;
+                    current->reservation.display();
+                    return;
+                }
+
+                current = current->next;
+
+            }
+
+            cout << "Reservation not found. " << endl;
+
+     }
+
+     // cancel a reservation
+     void cancelReservation()
+     {
+         int reservationID;
+
+         cout << "\n===== Cancel Reservation =====" << endl;
+
+         cout << " Enter Reservation ID: ";
+         cin >> reservationID;
+
+         Node* current = head;
+         Node* previous = nullptr;
+
+         //search for the reservation
+         while (current != nullptr)
+         {
+             if (current->reservation.reservationID == reservationID)
+                 break;
+
+             previous = current;
+             current = current->next;
+         }
+
+
