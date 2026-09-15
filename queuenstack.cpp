@@ -11,7 +11,7 @@ using namespace std;
 
 
 // check if empty 
-void validateReservation(const ReservationR& r)
+void validateReservation(const Reservation& r)
 {
     if (r.resID.empty())
         throw invalid_argument("Reservation ID cannot be empty.");
@@ -27,26 +27,26 @@ void validateReservation(const ReservationR& r)
 
 
 //takes queue by reference
-void addToWaitngList(queue<ReservationR>& waitingList, const ReservationR& r) 
+void addToWaitngList(queue<Reservation>& waitingList, const Reservation& r) 
 {
     validateReservation(r);
     waitingList.push(r);
 }
 
 //parse the queue 
-Reservation processNext(queue<ReservationR>& waitingList)
+Reservation processNext(queue<Reservation>& waitingList)
 {
     if (waitingList.empty()) 
     {
         throw runtime_error("No reservations in the list");
     }
-    ReservationR nextReservation = waitingList.front();
+    Reservation nextReservation = waitingList.front();
     waitingList.pop();
     return nextReservation;
 }
 
 //Display without modifying the queue
-void displayWaitingList(queue<ReservationR> waitingList)
+void displayWaitingList(queue<Reservation> waitingList)
 {
     cout << "\n=== Waiting List ===\n";
     if (waitingList.empty())
@@ -56,33 +56,33 @@ void displayWaitingList(queue<ReservationR> waitingList)
     }
     while (!waitingList.empty())
     {
-        ReservationR r = waitingList.front();
+        Reservation r = waitingList.front();
         cout << r.stuName << " (ID: " << r.stuID << ") is waiting for resource " << r.resourceID << endl;
         waitingList.pop();
     }
 }
 
-void recordCancellation(stack<ReservationR>& history, const ReservationR& r)
+void recordCancellation(stack<Reservation>& history, const Reservation& r)
 {
     validateReservation(r);
     history.push(r);
 }
 
 //undo function
-ReservationR undo(stack<ReservationR>& history)
+Reservation undo(stack<Reservation>& history)
 {
     if (history.empty())
     {
         cout << "No cancellations to undo" << endl;
         return {"", "", "", "", ""}; //return empty reservation
     }
-    ReservationR last = history.top(); 
+    Reservation last = history.top(); 
     history.pop();
     return last;
 }
 
 //Display wihtout effecting the stack
-void displayHistory(stack<ReservationR> history) 
+void displayHistory(stack<Reservation> history) 
 {
     cout << "\n=== Cancellation History ===\n";
     if (history.empty())
@@ -92,7 +92,7 @@ void displayHistory(stack<ReservationR> history)
     }
     while (!history.empty())
     {
-        ReservationR r = history.top();
+        Reservation r = history.top();
         cout << r.stuName << " -> " << r.resourceID << endl;
         history.pop();
     }
