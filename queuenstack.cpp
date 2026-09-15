@@ -1,3 +1,4 @@
+#include "QueueNStack.h"
 #include <iostream>
 #include <queue>
 #include <stack>
@@ -6,15 +7,7 @@
 #include <vector>
 using namespace std;
 
-//struct to hold reservation info
-struct Reservation
-{
-    string resID;
-    string stuID;
-    string stuName;
-    string resourceID;
-    string date;
-};
+
 
 // check if empty 
 void validateReservation(const Reservation& r)
@@ -33,7 +26,7 @@ void validateReservation(const Reservation& r)
 
 
 //takes queue by reference
-void addToWatingList(queue<Reservation>& waitingList, const Reservation& r) 
+void addToWaitngList(queue<Reservation>& waitingList, const Reservation& r) 
 {
     validateReservation(r);
     waitingList.push(r);

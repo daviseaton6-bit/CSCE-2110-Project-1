@@ -6,105 +6,107 @@
 #include <vector>
 #include <stdexcept>
 #include "Display.h"
+#include "QueueNStack.h"
 using namespace std;
 
 int main()
 {
     vector<Resource> resources = loadResources("resources.txt");
-
+    queue<Reservation> waitingList;
+    stack<Reservation> cancellationHistory;
     int choice = 0;
 
-    while (choice != 9)
+    while (choice != 11)
     {
         cout << "\n===== Campus Resource Reservation System =====\n";
-        cout << "1. View Resources\n";
-        cout << "2. Create Reservation\n";
-        cout << "3. Cancel Reservation\n";
-        cout << "4. View Waiting Lists\n";
-        cout << "5. Undo Cancellation\n";
-        cout << "6. Search Reservations\n";
-        cout << "7. Sort Resources\n";
-        cout << "8. Generate Report\n";
-        cout << "9. Exit\n";
+        cout << "1. Display All Resources\n";
+        cout << "2. Display Resource Availability\n";
+        cout << "3. Create Reservation\n";
+        cout << "4. Cancel Reservation\n";
+        cout << "5. Display Active Reservations\n";
+        cout << "6. Add Student to Waiting List\n";
+        cout << "7. Remove Student from Waiting List\n";
+        cout << "8. Display Waiting List\n";
+        cout << "9. Undo Cancellation\n";
+        cout << "10. Display Cancellation History\n";
+        cout << "11. Exit\n";
         cout << "Enter Choice: ";
 
         cin >> choice;
 
-        if (choice == 1)
+        switch (choice)
         {
+        case 1:
             displayAll(resources);
+            break;
+
+        case 2:
             displayAvailability(resources);
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 2)
-        {
+        case 3:
             cout << "Create Reservation selected.\n";
+            // createReservation();
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 3)
-        {
+        case 4:
             cout << "Cancel Reservation selected.\n";
+            // cancelReservation();
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 4)
-        {
-            cout << "View Waiting Lists selected.\n";
+        case 5:
+            cout << "Display Active Reservations selected.\n";
+            // displayReservations();
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 5)
-        {
-            cout << "Undo Cancellation selected.\n";
+        case 6:
+            cout << "Add Student to Waiting List selected.\n";
+            // addToWaitingList();
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 6)
-        {
-            cout << "Search Reservations selected.\n";
+        case 7:
+            cout << "Remove Student from Waiting List selected.\n";
+            // removeFromWaitingList();
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 7)
-        {
-            cout << "Sort Resources selected.\n";
+        case 8:
+            cout << "Display Waiting List selected.\n";
+            displayWaitingList(waitingList);
+            break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice == 8)
-        {
-            cout << "Generate Report selected.\n";
+        case 9:
+{
+Reservation restored = undo(cancellationHistory);
+if (!restored.resID.empty())
+{
+cout << "Restored: "
+<< restored.stuName
+<< endl;
+}
+break;
 
-            cout << "\nPress Enter to continue...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (choice != 9)
-        {
+}
+
+        case 10:
+            cout << "Display Cancellation History selected.\n";
+            displayHistory(cancellationHistory);
+            break;
+
+        case 11:
+            cout << "Exiting program...\n";
+            break;
+
+        default:
             cout << "Invalid choice.\n";
+        }
 
+        if (choice != 11)
+        {
             cout << "\nPress Enter to continue...";
             cin.ignore();
             cin.get();
         }
     }
 
-    cout << "Exiting program...\n";
     return 0;
 }
