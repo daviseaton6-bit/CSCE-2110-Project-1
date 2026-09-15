@@ -5,68 +5,106 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
+#include "Display.h"
 using namespace std;
 
 int main()
 {
-    queue<Reservation> waitingList; 
-    stack<Reservation> cancellationHistory;
     vector<Resource> resources = loadResources("resources.txt");
-    
-    cout << "===== Campus Resource Reservation System ===== \n 1.View Resources \n 2. Create Reservation\n 3.Cancel Reservation \n 4.View Waiting Lists \n 5.Undo Cancellation \n 6.Search Reservations \n 7.Sort Resources \n 8.Generate Report \n 9.Exit \n Enter Choice: ";
-    int choice;
-    cin >> choice
 
-    //potential way to re-ask the cout and cin statement for next input
-    while (choice != 9) {
-      
-      //View Resources
-      if (choice == 1) 
-      {
-          displayAll(resources);
-          displayAvailability(resources)
-          
-      }
-      //Create reservation
-      if (choice == 2) 
-      {
+    int choice = 0;
 
-      }
-      //Cancel Reservation
-      if (choice == 3) 
-      {
+    while (choice != 9)
+    {
+        cout << "\n===== Campus Resource Reservation System =====\n";
+        cout << "1. View Resources\n";
+        cout << "2. Create Reservation\n";
+        cout << "3. Cancel Reservation\n";
+        cout << "4. View Waiting Lists\n";
+        cout << "5. Undo Cancellation\n";
+        cout << "6. Search Reservations\n";
+        cout << "7. Sort Resources\n";
+        cout << "8. Generate Report\n";
+        cout << "9. Exit\n";
+        cout << "Enter Choice: ";
 
-      }
-      //View Waiting Lists
-      if (choice == 4) 
-      {
-          displayWaitingList(waitingList);
-      }  
-      //Undo Cancellation
-      if (choice == 5) 
-      {
-          undo(cancellationHistory);
-      }
-      //Search Reservations
-      if (choice == 6) 
-      {
+        cin >> choice;
 
-      }
-      //Sort Resources
-      if (choice == 7) 
-      {
+        if (choice == 1)
+        {
+            displayAll(resources);
+            displayAvailability(resources);
 
-      }
-      //Generate Report
-      if (choice == 8) 
-      {
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 2)
+        {
+            cout << "Create Reservation selected.\n";
 
-      }
-      //Exit
-      if (choice == 9) 
-      {
-          return 0;
-      }
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 3)
+        {
+            cout << "Cancel Reservation selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 4)
+        {
+            cout << "View Waiting Lists selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 5)
+        {
+            cout << "Undo Cancellation selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 6)
+        {
+            cout << "Search Reservations selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 7)
+        {
+            cout << "Sort Resources selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice == 8)
+        {
+            cout << "Generate Report selected.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (choice != 9)
+        {
+            cout << "Invalid choice.\n";
+
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
     }
-      return 0;
-  }
+
+    cout << "Exiting program...\n";
+    return 0;
+}
