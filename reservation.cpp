@@ -1,4 +1,4 @@
-Campus resources reservation system.cpp : 
+// Campus resources reservation system.cpp : 
 //
 
 #include <iostream>
@@ -48,7 +48,7 @@ struct Node
 };
 
 //Reservation Manager
-class ReservationManager(int reservation
+class ReservationManager
 {
 private:
         Node* head;
@@ -84,11 +84,12 @@ void createReservation(int reservationID)
         if (current->reservation.reservationID == reservationID)
         
             cout << " This reservation ID is already in the system." << endl;
-            return; 
+            return;
         
+
     }
     cout << "Enter Student ID: ";
-    getline(cin, studentID);
+    cin >> studentID;
 
     cout << "Enter Student Name: ";
     getline(cin, studentName);
@@ -106,9 +107,14 @@ void createReservation(int reservationID)
         studentName,
         resourceID,
         reservationDate
-        );
+    );
+
+    //create new node
+
     Node* newNode = new Node(newReservation);
-cout << "Reservation created Successfully! " << endl;
+
+    cout << "Reservation created Successfully! " << endl;
+}
     //Display the reservations
 void viewReservations()
 {
@@ -179,5 +185,25 @@ void viewReservations()
              previous = current;
              current = current->next;
          }
+
+
+     }
+        
+       
+        
+
+
+
+
+
+
+int main()
+{
+    
+    ReservationManager manager;
+    Reservation newReservation;
+    
+   
+}
 
 
