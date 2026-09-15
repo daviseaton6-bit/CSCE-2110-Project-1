@@ -1,11 +1,12 @@
 #include "QueueNStack.h"
+#include "Reservation.h"
 #include <iostream>
 #include <queue>
 #include <stack>
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <ReservationManager.h>
+
 using namespace std;
 
 
@@ -103,7 +104,6 @@ void displayHistory(stack<Reservation> history)
         history.pop();
     }
 }
-<<<<<<< HEAD
 
 
 
@@ -154,5 +154,3 @@ vector<Reservation> loadReservations(const string& filename)
 
     return reservations;
 }
-=======
->>>>>>> dc370bc450aa064344a7abeaa2d448266a50291a
