@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -27,41 +28,44 @@ void validateReservation(const Reservation& r)
 }
 
 
-//takes queue by reference
-void addToWaitingList(queue<Reservation>& waitingList, const Reservation& r) 
+//takes the map by reference
+void addToWaitingList(map<string, queue<Reservation>>& waitingLists, const Reservation& r) 
 {
     validateReservation(r);
-    waitingList.push(r);
+    waitingLists[r.resourceID].push(r); //creates queue if not alr one
 }
 
-//parse the queue 
-Reservation processNext(queue<Reservation>& waitingList)
+//parse the queue, needs to know which resource has opened
+Reservation processNext(map<string, queue<Reservation>>& waitingLists, const string& resourceID)
 {
-    if (waitingList.empty()) 
+    auto it = waitingLists.find(resourceID);
+    if (it == waitingLists.end() || it->second.empty()) 
     {
-        throw runtime_error("No reservations in the list");
+        throw runtime_error("No reservations waiting for resource " + resourceID);
     }
-    Reservation nextReservation = waitingList.front();
-    waitingList.pop();
+    Reservation nextReservation = it->second.front();
+    it->second.pop();
     return nextReservation;
 }
 
 //Display without modifying the queue
-void displayWaitingList(queue<Reservation> waitingList)
+void displayWaitingLists(map<string, queue<Reservation>> waitingLists)
 {
     cout << "\n=== Waiting List ===\n";
-    if (waitingList.empty())
+    if (waitingLists.empty())
     {
         cout << "(empty)\n";
         return;
     }
-    while (!waitingList.empty())
+    for (auto& [resourceID, q] : waitingLists)
     {
-        Reservation r = waitingList.front();
-        cout << r.studentName
-     << " (ID: " 
-     << r.studentID << ") is waiting for resource " << r.resourceID << endl;
-        waitingList.pop();
+        cout << "Resource " << resourceID << ":\n";
+        while (!q.empty())
+        {
+            Reservation r = q.front();
+            cout << " " << r.studentName << " (ID: " << r.studentID << ")" << endl;
+            q.pop();
+        }        
     }
 }
 
