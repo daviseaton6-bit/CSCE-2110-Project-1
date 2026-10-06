@@ -50,7 +50,7 @@ public:
     void undoCancellation();
     void displayCancellationHistory();
     map<string, int> getCountsByResource() const;
-    vector<Reservation> getReservations() const
+    vector<Reservation> getReservations() const;
 };
 
 #endif
