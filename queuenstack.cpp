@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <stdexcept>
 
 using namespace std;
 
@@ -33,19 +34,27 @@ void addToWaitingList(map<string, queue<Reservation>>& waitingList,
                       const Reservation& r)
 {
     validateReservation(r);
-    waitingList.push(r);
+    waitingList[r.resourceID].push(r);
 }
 
 //parse the queue, needs to know which resource has opened
-Reservation processNext(map<string, queue<Reservation>>& waitingList)
+Reservation processNext(map<string, queue<Reservation>>& waitingList,
+                        const string& resourceID)
 {
-    if (waitingList.empty())
+    auto it = waitingList.find(resourceID);
+
+    if (it == waitingList.end() || it->second.empty())
     {
         throw runtime_error("No reservations in the list");
     }
 
-    Reservation nextReservation = waitingList.front();
-    waitingList.pop();
+    Reservation nextReservation = it->second.front();
+    it->second.pop();
+
+    if (it->second.empty())
+    {
+        waitingList.erase(it);
+    }
 
     return nextReservation;
 }
@@ -61,31 +70,38 @@ void displayWaitingList(map<string, queue<Reservation>> waitingList)
         return;
     }
 
-    while (!waitingList.empty())
+    for (auto& entry : waitingList)
     {
-        Reservation r = waitingList.front();
+        cout << "[" << entry.first << "]\n";
 
-        cout << r.studentName
-             << " (ID: "
-             << r.studentID
-             << ") waiting for resource "
-             << r.resourceID
-             << endl;
+        while (!entry.second.empty())
+        {
+            Reservation r = entry.second.front();
 
-        waitingList.pop();
+            cout << r.studentName
+                 << " (ID: "
+                 << r.studentID
+                 << ") waiting for resource "
+                 << r.resourceID
+                 << endl;
+
+            entry.second.pop();
+        }
     }
 }
 
-void recordCancellation(stack<Reservation>& history, const Reservation& r)
+void recordCancellation(map<string, stack<Reservation>>& history, const Reservation& r)
 {
     validateReservation(r);
-    history.push(r);
+    history[r.resourceID].push(r);
 }
 
 //undo function
-Reservation undo(stack<Reservation>& history)
+Reservation undo(map<string, stack<Reservation>>& history, const string& resourceID)
 {
-    if (history.empty())
+    auto it = history.find(resourceID);
+
+    if (it == history.end() || it->second.empty())
     {
         cout << "No cancellations to undo" << endl;
 
@@ -93,14 +109,19 @@ Reservation undo(stack<Reservation>& history)
         return emptyReservation;
     }
 
-    Reservation last = history.top();
-    history.pop();
+    Reservation last = it->second.top();
+    it->second.pop();
+
+    if (it->second.empty())
+    {
+        history.erase(it);
+    }
 
     return last;
 }
 
 //Display wihtout effecting the stack
-void displayHistory(stack<Reservation> history) 
+void displayHistory(map<string, stack<Reservation>> history) 
 {
     cout << "\n=== Cancellation History ===\n";
     if (history.empty())
@@ -108,11 +129,15 @@ void displayHistory(stack<Reservation> history)
         cout << "(empty)\n";
         return;
     }
-    while (!history.empty())
+    for (auto& entry : history)
     {
-        Reservation r = history.top();
-        cout << r.studentName << " (ID: " << r.studentID << ") -> " << r.resourceID << endl;
-        history.pop();
+        cout << "[" << entry.first << "]\n";
+        while (!entry.second.empty())
+        {
+            Reservation r = entry.second.top();
+            cout << r.studentName << " (ID: " << r.studentID << ") -> " << r.resourceID << endl;
+            entry.second.pop();
+        }
     }
 }
 
