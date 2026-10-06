@@ -78,10 +78,13 @@ while (choice != 14)
 
     case 8:
         cout << "Remove Student from Waiting List selected.\n";
-
+        string resourceID;
+        cout << "Enter Resource ID: ";
+        cin >> resourceID;
+        
         try
         {
-            Reservation next = processNext(waitingList);
+            Reservation next = processNext(waitingList, resourceID);
 
             cout << "Removed from waiting list:\n";
             next.display();
