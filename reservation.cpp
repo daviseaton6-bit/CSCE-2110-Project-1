@@ -41,7 +41,7 @@ ReservationManager::ReservationManager()
 //create reservation
 void ReservationManager::createReservation(
     const vector<Resource>& resources,
-    queue<Reservation>& waitingList)
+    map<string, queue<Reservation>>& waitingList)
 {
     int reservationID;
     int studentID;
