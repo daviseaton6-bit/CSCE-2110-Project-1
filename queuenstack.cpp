@@ -29,7 +29,7 @@ void validateReservation(const Reservation& r)
 
 
 //takes the map by reference
-void addToWaitingList(queue<Reservation>& waitingList,
+void addToWaitingList(map<string, queue<Reservation>>& waitingList,
                       const Reservation& r)
 {
     validateReservation(r);
@@ -37,7 +37,7 @@ void addToWaitingList(queue<Reservation>& waitingList,
 }
 
 //parse the queue, needs to know which resource has opened
-Reservation processNext(queue<Reservation>& waitingList)
+Reservation processNext(map<string, queue<Reservation>>& waitingList)
 {
     if (waitingList.empty())
     {
@@ -51,7 +51,7 @@ Reservation processNext(queue<Reservation>& waitingList)
 }
 
 //Display without modifying the queue
-void displayWaitingList(queue<Reservation> waitingList)
+void displayWaitingList(map<string, queue<Reservation>> waitingList)
 {
     cout << "\n=== Waiting List ===\n";
 
