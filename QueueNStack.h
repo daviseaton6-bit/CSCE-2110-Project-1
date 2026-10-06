@@ -7,21 +7,22 @@
 #include <map>
 #include <vector>
 #include <string>
+using namepsace std;
 
 void validateReservation(const Reservation& r);
 
-void addToWaitingList(std::map<std::string, std::queue<Reservation>>& waitingList,
+void addToWaitingList(map<string, queue<Reservation>>& waitingList,
                       const Reservation& r);
-Reservation processNext(std::map<std::string, std::queue<Reservation>>& waitingList,
-                        const std::string& resourceID);
-void displayWaitingList(std::map<std::string, std::queue<Reservation>> waitingList);
+Reservation processNext(map<string, queue<Reservation>>& waitingList,
+                        const string& resourceID);
+void displayWaitingList(map<string, queue<Reservation>> waitingList);
 
-void recordCancellation(std::map<std::string, std::stack<Reservation>>& history,
+void recordCancellation(map<string, stack<Reservation>>& history,
                         const Reservation& r);
-Reservation undo(std::map<std::string, std::stack<Reservation>>& history,
-                 const std::string& resourceID);
-void displayHistory(std::map<std::string, std::stack<Reservation>> history);
+Reservation undo(map<string, stack<Reservation>>& history,
+                 const string& resourceID);
+void displayHistory(map<string, stack<Reservation>> history);
 
-std::vector<Reservation> loadReservations(const std::string& filename);
+vector<Reservation> loadReservations(const string& filename);
 
 #endif
