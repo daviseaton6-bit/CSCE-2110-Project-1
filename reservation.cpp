@@ -229,30 +229,20 @@ void ReservationManager::displayCancellationHistory()
         return;
     }
 
-    stack<Reservation> temp = cancelledReservations;
-
-    while (!temp.empty())
+    for (const auto& entry : cancelledReservations)
     {
-        temp.top().display();
-        cout << endl;
+        stack<Reservation> temp = entry.second;
 
-        temp.pop();
+        while (!temp.empty())
+        {
+            temp.top().display();
+            cout << endl;
+
+            temp.pop();
+        }
     }
 }
 
-vector<Reservation> ReservationManager::getReservations() const
-{
-    vector<Reservation> list;
-    Node* current = head;
-
-    while (current != nullptr)
-    {
-        list.push_back(current->reservation);
-        current = current->next;
-    }
-
-    return list;
-}
 
 
 
