@@ -3,6 +3,7 @@
 #include <stack>
 #include <vector>
 #include <stdexcept>
+#include "Report.h"
 #include "Reservation.h"
 #include "Display.h"
 #include "QueueNStack.h"
@@ -12,7 +13,7 @@
 using namespace std;
 
 //get current time
-string getTime() 
+string getTime()
 {
     //current time
     time_t now = time(nullptr);
@@ -24,7 +25,7 @@ string getTime()
 }
 
 //walks the list and tallies the num of each reservation
-map<string, int> Reservationmanager::getCountsByResource() const
+map<string, int> ReservationManager::getCountsByResource() const
 {
     map<string, int> counts;
     Node* current = head;
@@ -54,7 +55,7 @@ int getWaitingCount(const map<string, queue<Reservation>>& waitingLists, const s
     return 0;
 }
 
-void displayActiveRes(const map<string, int>& counts, const vector<Resource>>& resources)
+void displayActiveRes(const map<string, int>& counts, const vector<Resource>& resources)
 {
     cout << "----------------------------------------" << endl;
     cout << "ACTIVE RESERVATIONS" << endl;
@@ -64,12 +65,12 @@ void displayActiveRes(const map<string, int>& counts, const vector<Resource>>& r
 
     for (const Resource& res : resources)
     {
-        int count = getCount(counts, res.resourceID);
-        cout << res.resourceID << ": " << count << " active reservations" << endl;
+        int count = getCount(counts, res.id);
+        cout << res.id << " (" << res.name << "): " << count << " active reservations" << endl;
         totalActive += count;
     }
     cout << "Total active reservations: " << totalActive << endl;
-    
+
 }
 void displayUtilization(const map<string, int>& counts, const vector<Resource>& resources)
 {
@@ -83,17 +84,18 @@ void displayUtilization(const map<string, int>& counts, const vector<Resource>& 
     int inUse = 0;
     for (const Resource& res : resources)
     {
-        int count = getCount(counts, res.resourceID);
+        int count = getCount(counts, res.id);
         int percent = 0;
         if (totalActive > 0)
             percent = (count * 100) / totalActive;
-        cout << res.resourceID << ": " << percent << "% of all reservations" << endl;
+        cout << res.id << " (" << res.name << "): " << percent << "% of all reservations" << endl;
         if (count > 0)
             inUse++;
     }
     cout << "Resources in use: " << inUse << " of " << resources.size() << endl;
 }
-void displayMostRequested(const map<string, int>& counts, const vector<Resource>& resources)
+void displayMostRequested(const map<string, int>& counts, const vector<Resource>& resources,
+                          const map<string, queue<Reservation>>& waitingLists)
 {
     cout << "----------------------------------------" << endl;
     cout << "MOST REQUESTED RESOURCES" << endl;
@@ -103,27 +105,27 @@ void displayMostRequested(const map<string, int>& counts, const vector<Resource>
     string mostID = "n/a";
     for (const Resource& res : resources)
     {
-        int active = getCount(counts,res.resourceID);
-        int waiting = getWaiting(waitingLists, res.resourceID);
+        int active = getCount(counts, res.id);
+        int waiting = getWaitingCount(waitingLists, res.id);
         int requests = active + waiting;
 
-        cout << res.resourceID << ": " << requests << " requests" << " (" << active << " active, " << waiting << " waiting)" << endl;
+        cout << res.id << " (" << res.name << "): " << requests << " requests" << " (" << active << " active, " << waiting << " waiting)" << endl;
         if (requests > mostRequested)
         {
             mostRequested = requests;
-            mostID = res.resourceID;
+            mostID = res.id;
         }
     }
     cout << "Most requested resource: " << mostID << " (" << mostRequested << " requests)" << endl;
-    
+
 }
 
-void displayWaitingList(const Reservationmanager& manager, const vector<Resource>& resources, const map<string, queue<Reservation>>& waitingLists)
+void displayWaitingListStats(const map<string, queue<Reservation>>& waitingLists)
 {
     cout << "----------------------------------------" << endl;
     cout << "WAITING LISTS STATISTICS" << endl;
     cout << "----------------------------------------" << endl;
-    
+
     int totalWaiting = 0;
     int withWaitlist = 0;
     int longestWaitlist = 0;
@@ -141,7 +143,7 @@ void displayWaitingList(const Reservationmanager& manager, const vector<Resource
         totalWaiting += q.size();
         if (!q.empty())
             withWaitlist++;
-        if (q.size() > longestWaitlist)
+        if ((int)q.size() > longestWaitlist)
         {
             longestWaitlist = q.size();
             longestID = resourceID;
@@ -150,23 +152,20 @@ void displayWaitingList(const Reservationmanager& manager, const vector<Resource
     cout << "Resources with waitlists: " << withWaitlist << endl;
     cout << "Longest waitlist: " << longestWaitlist << " (" << longestID << ")" << endl;
     cout << "Total waiting: " << totalWaiting << endl;
-    cout << "----------------------------------------" << endl;
 
 }
-void displayReport(const Reservationmanager& manager, const vector<Resource>& resources, const map<string, queue<Reservation>>& waitingLists)
+void displayReport(const ReservationManager& manager, const vector<Resource>& resources, const map<string, queue<Reservation>>& waitingLists)
 {
-    map<string, int> counts = manager.getCountsByResourceID();
+    map<string, int> counts = manager.getCountsByResource();
     cout << "CAMPUS RESOURCE RESERVATION SYSTEM - REPORT" << endl;
     cout << "Report generated at: " << getTime() << endl;
-    cout << "----------------------------------------" << endl;
-    displayActiveReservations(counts, resources);
+    displayActiveRes(counts, resources);
     displayUtilization(counts, resources);
     displayMostRequested(counts, resources, waitingLists);
-    displayWaitingList(waitingLists);
+    displayWaitingListStats(waitingLists);
 
     cout << "----------------------------------------" << endl;
 }
 //there is two cancellation histories
 
 //fix reservation pushing to one single queue
-
