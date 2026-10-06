@@ -1,26 +1,27 @@
 #ifndef QUEUENSTACK_H
 #define QUEUENSTACK_H
+
 #include "Reservation.h"
 #include <queue>
 #include <stack>
+#include <map>
+#include <vector>
 #include <string>
 
-using namespace std;
+void validateReservation(const Reservation& r);
 
-
-
-void addToWaitingList(queue<Reservation>& waitingList,
+void addToWaitingList(std::map<std::string, std::queue<Reservation>>& waitingList,
                       const Reservation& r);
+Reservation processNext(std::map<std::string, std::queue<Reservation>>& waitingList,
+                        const std::string& resourceID);
+void displayWaitingList(std::map<std::string, std::queue<Reservation>> waitingList);
 
-Reservation processNext(queue<Reservation>& waitingList);
-
-void displayWaitingList(queue<Reservation> waitingList);
-
-void recordCancellation(stack<Reservation>& history,
+void recordCancellation(std::map<std::string, std::stack<Reservation>>& history,
                         const Reservation& r);
+Reservation undo(std::map<std::string, std::stack<Reservation>>& history,
+                 const std::string& resourceID);
+void displayHistory(std::map<std::string, std::stack<Reservation>> history);
 
-Reservation undo(stack<Reservation>& history);
-
-void displayHistory(stack<Reservation> history);
+std::vector<Reservation> loadReservations(const std::string& filename);
 
 #endif
