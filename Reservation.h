@@ -35,7 +35,7 @@ class ReservationManager
 {
 private:
     Node* head;
-    stack<Reservation> cancelledReservations;
+    map<string, stack<Reservation>> cancelledReservations;
 
 public:
     ReservationManager();
@@ -50,7 +50,7 @@ public:
     void undoCancellation();
     void displayCancellationHistory();
     map<string, int> getCountsByResource() const;
+    vector<Reservation> getReservations() const
 };
-vector<Reservation> getReservations() const
 
 #endif
