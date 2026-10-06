@@ -19,6 +19,7 @@ int main()
     vector<Resource> resources = loadResources("resources.txt");
     ReservationManager manager;
     map<string, queue<Reservation>> waitingList;
+    manager.addLoadedReservations(loadReservations("reservations.txt"), resources, waitingList);
     int choice = 0;
 
 while (choice != 14)
@@ -59,7 +60,7 @@ while (choice != 14)
 
     case 4:
         cout << "Cancel Reservation selected.\n";
-        manager.cancelReservation();
+        manager.cancelReservation(resources, waitingList);
         break;
 
     case 5:
@@ -105,7 +106,7 @@ while (choice != 14)
         break;
 
     case 10:
-        manager.undoCancellation();
+        manager.undoCancellation(resources);
         break;
 
     case 11:
