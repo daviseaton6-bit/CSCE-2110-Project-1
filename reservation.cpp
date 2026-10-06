@@ -240,6 +240,21 @@ void ReservationManager::displayCancellationHistory()
     }
 }
 
+vector<Reservation> ReservationManager::getReservations() const
+{
+    vector<Reservation> list;
+    Node* current = head;
+
+    while (current != nullptr)
+    {
+        list.push_back(current->reservation);
+        current = current->next;
+    }
+
+    return list;
+}
+
+
 
 
 
