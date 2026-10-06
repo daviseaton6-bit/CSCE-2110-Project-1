@@ -181,7 +181,7 @@ void ReservationManager::searchReservation()
         return;
     }
 
-    cancelledReservations.push(current->reservation);
+    recordCancellation(cancelledReservations, current->reservation);
 
     if (previous == nullptr)
     {
@@ -197,16 +197,19 @@ void ReservationManager::searchReservation()
     cout << "Reservation cancelled successfully." << endl;
 }
         
-       void ReservationManager::undoCancellation()
+void ReservationManager::undoCancellation()
 {
-    if (cancelledReservations.empty())
+    string resourceID;
+    cout << "Enter Resource ID: ";
+    cin >> resourceID;
+    
+
+    Reservation restored = undo(cancelledReservations, resourceID);
+    
+    if (restored.reservationID == 0)
     {
-        cout << "No cancellations to undo." << endl;
         return;
     }
-
-    Reservation restored = cancelledReservations.top();
-    cancelledReservations.pop();
 
     Node* newNode = new Node(restored);
 
