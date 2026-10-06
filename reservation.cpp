@@ -164,7 +164,7 @@ void ReservationManager::searchReservation()
                                            map<string, queue<Reservation>>& waitingList)
 {
     int reservationID;
-
+    //saves reservation id to allow for promotion or swapping availability 
     cout << "\n===== Cancel Reservation =====" << endl;
     cout << "Enter Reservation ID: ";
 
@@ -206,9 +206,9 @@ void ReservationManager::searchReservation()
     delete current;
 
     cout << "Reservation cancelled successfully." << endl;
-
+    
+    //promotes the first on waiting list
     auto it = waitingList.find(freedResourceID);
-
     if (it != waitingList.end() && !it->second.empty())
     {
         Reservation promoted = processNext(waitingList, freedResourceID);
@@ -221,6 +221,7 @@ void ReservationManager::searchReservation()
         cout << promoted.studentName << " (ID: " << promoted.studentID
              << ") was moved from the waiting list and now has " << freedResourceID << "." << endl;
     }
+    //or just makes it available
     else
     {
         for (auto& res : resources)
@@ -232,7 +233,7 @@ void ReservationManager::searchReservation()
         }
     }
 }
-        
+//undo now doesnt allow undo if there is a waiting list for that resource
 void ReservationManager::undoCancellation(vector<Resource>& resources)
 {
     string resourceID;
@@ -249,7 +250,7 @@ void ReservationManager::undoCancellation(vector<Resource>& resources)
 
     if (!isResourceAvailable(resources, resourceID))
     {
-        cout << "Cannot undo, resource " << resourceID << " has already been reserved again." << endl;
+        cout << "Cannot undo, resource " << resourceID << " has already been filled" << endl;
         recordCancellation(cancelledReservations, restored);
         return;
     }
@@ -307,7 +308,7 @@ vector<Reservation> ReservationManager::getReservations() const
 
     return list;
 }
-
+//loads reservations
 void ReservationManager::addLoadedReservations(const vector<Reservation>& loaded,
                                                vector<Resource>& resources,
                                                map<string, queue<Reservation>>& waitingList)
