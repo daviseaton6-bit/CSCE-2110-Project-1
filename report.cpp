@@ -3,7 +3,7 @@
 #include <stack>
 #include <vector>
 #include <stdexcept>
-#include "Report.h"
+#include "report.h"
 #include "Reservation.h"
 #include "Display.h"
 #include "QueueNStack.h"
