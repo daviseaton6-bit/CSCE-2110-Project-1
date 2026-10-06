@@ -40,7 +40,7 @@ ReservationManager::ReservationManager()
 
 //create reservation
 void ReservationManager::createReservation(
-    const vector<Resource>& resources,
+    vector<Resource>& resources,
     map<string, queue<Reservation>>& waitingList)
 {
     int reservationID;
@@ -94,6 +94,14 @@ void ReservationManager::createReservation(
 
     newNode->next = head;
     head = newNode;
+
+    for (auto& res : resources)
+    {
+        if (res.id == resourceID)
+        {
+            res.availability = "Unavailable";
+        }
+    }
 
     cout << "Reservation created successfully!" << endl;
 }
@@ -152,7 +160,8 @@ void ReservationManager::searchReservation()
 }
 
      // cancel a reservation
-    void ReservationManager::cancelReservation()
+    void ReservationManager::cancelReservation(vector<Resource>& resources,
+                                           map<string, queue<Reservation>>& waitingList)
 {
     int reservationID;
 
@@ -183,6 +192,8 @@ void ReservationManager::searchReservation()
 
     recordCancellation(cancelledReservations, current->reservation);
 
+    string freedResourceID = current->reservation.resourceID;
+
     if (previous == nullptr)
     {
         head = current->next;
@@ -195,9 +206,34 @@ void ReservationManager::searchReservation()
     delete current;
 
     cout << "Reservation cancelled successfully." << endl;
+
+    auto it = waitingList.find(freedResourceID);
+
+    if (it != waitingList.end() && !it->second.empty())
+    {
+        Reservation promoted = processNext(waitingList, freedResourceID);
+
+        Node* newNode = new Node(promoted);
+
+        newNode->next = head;
+        head = newNode;
+
+        cout << promoted.studentName << " (ID: " << promoted.studentID
+             << ") was moved from the waiting list and now has " << freedResourceID << "." << endl;
+    }
+    else
+    {
+        for (auto& res : resources)
+        {
+            if (res.id == freedResourceID)
+            {
+                res.availability = "Available";
+            }
+        }
+    }
 }
         
-void ReservationManager::undoCancellation()
+void ReservationManager::undoCancellation(vector<Resource>& resources)
 {
     string resourceID;
     cout << "Enter Resource ID: ";
@@ -209,6 +245,21 @@ void ReservationManager::undoCancellation()
     if (restored.reservationID == 0)
     {
         return;
+    }
+
+    if (!isResourceAvailable(resources, resourceID))
+    {
+        cout << "Cannot undo, resource " << resourceID << " has already been reserved again." << endl;
+        recordCancellation(cancelledReservations, restored);
+        return;
+    }
+
+    for (auto& res : resources)
+    {
+        if (res.id == resourceID)
+        {
+            res.availability = "Unavailable";
+        }
     }
 
     Node* newNode = new Node(restored);
@@ -257,7 +308,33 @@ vector<Reservation> ReservationManager::getReservations() const
     return list;
 }
 
+void ReservationManager::addLoadedReservations(const vector<Reservation>& loaded,
+                                               vector<Resource>& resources,
+                                               map<string, queue<Reservation>>& waitingList)
+{
+    for (const Reservation& r : loaded)
+    {
+        if (isResourceAvailable(resources, r.resourceID))
+        {
+            Node* newNode = new Node(r);
 
+            newNode->next = head;
+            head = newNode;
+
+            for (auto& res : resources)
+            {
+                if (res.id == r.resourceID)
+                {
+                    res.availability = "Unavailable";
+                }
+            }
+        }
+        else
+        {
+            addToWaitingList(waitingList, r);
+        }
+    }
+}
 
 
 
