@@ -39,7 +39,7 @@ private:
 
 public:
     ReservationManager();
-
+    //dropped the const on resources so availability can be altered
     void createReservation(
     vector<Resource>& resources,
     map<string, queue<Reservation>>& waitingList
