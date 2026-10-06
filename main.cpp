@@ -17,7 +17,7 @@ int main()
 {
     vector<Resource> resources = loadResources("resources.txt");
     ReservationManager manager;
-    queue<Reservation> waitingList;
+    map<string, queue<Reservation>> waitingList;
     int choice = 0;
 
 while (choice != 14)
