@@ -161,6 +161,11 @@ vector<Reservation> loadReservations(const string& filename)
 
     while (getline(file, line))
     {
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+        if (line.empty())
+            continue;
+
         stringstream ss(line);
 
         string resID;
