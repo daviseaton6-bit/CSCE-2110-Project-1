@@ -51,5 +51,6 @@ public:
     void displayCancellationHistory();
     map<string, int> getCountsByResource() const;
 };
+vector<Reservation> getReservations() const
 
 #endif
