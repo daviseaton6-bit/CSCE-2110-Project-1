@@ -29,43 +29,50 @@ void validateReservation(const Reservation& r)
 
 
 //takes the map by reference
-void addToWaitingList(map<string, queue<Reservation>>& waitingLists, const Reservation& r) 
+void addToWaitingList(queue<Reservation>& waitingList,
+                      const Reservation& r)
 {
     validateReservation(r);
-    waitingLists[r.resourceID].push(r); //creates queue if not alr one
+    waitingList.push(r);
 }
 
 //parse the queue, needs to know which resource has opened
-Reservation processNext(map<string, queue<Reservation>>& waitingLists, const string& resourceID)
+Reservation processNext(queue<Reservation>& waitingList)
 {
-    auto it = waitingLists.find(resourceID);
-    if (it == waitingLists.end() || it->second.empty()) 
+    if (waitingList.empty())
     {
-        throw runtime_error("No reservations waiting for resource " + resourceID);
+        throw runtime_error("No reservations in the list");
     }
-    Reservation nextReservation = it->second.front();
-    it->second.pop();
+
+    Reservation nextReservation = waitingList.front();
+    waitingList.pop();
+
     return nextReservation;
 }
 
 //Display without modifying the queue
-void displayWaitingLists(map<string, queue<Reservation>> waitingLists)
+void displayWaitingList(queue<Reservation> waitingList)
 {
     cout << "\n=== Waiting List ===\n";
-    if (waitingLists.empty())
+
+    if (waitingList.empty())
     {
         cout << "(empty)\n";
         return;
     }
-    for (auto& [resourceID, q] : waitingLists)
+
+    while (!waitingList.empty())
     {
-        cout << "Resource " << resourceID << ":\n";
-        while (!q.empty())
-        {
-            Reservation r = q.front();
-            cout << " " << r.studentName << " (ID: " << r.studentID << ")" << endl;
-            q.pop();
-        }        
+        Reservation r = waitingList.front();
+
+        cout << r.studentName
+             << " (ID: "
+             << r.studentID
+             << ") waiting for resource "
+             << r.resourceID
+             << endl;
+
+        waitingList.pop();
     }
 }
 
