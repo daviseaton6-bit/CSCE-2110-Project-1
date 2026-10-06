@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 #include <string>
-using namepsace std;
+using namespace std;
 
 void validateReservation(const Reservation& r);
 
