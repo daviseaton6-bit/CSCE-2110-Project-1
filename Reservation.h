@@ -5,6 +5,7 @@
 #include <stack>
 #include <vector>
 #include <queue>
+#include <map>
 #include "Display.h"
 using namespace std;
 
@@ -41,15 +42,14 @@ public:
 
     void createReservation(
     const vector<Resource>& resources,
-    queue<Reservation>& waitingList
+    map<string, queue<Reservation>>& waitingList
 );
     void viewReservations();
     void searchReservation();
     void cancelReservation();
     void undoCancellation();
     void displayCancellationHistory();
+    map<string, int> getCountsByResource() const;
 };
-
-vector<Reservation> getReservations() const;
 
 #endif
