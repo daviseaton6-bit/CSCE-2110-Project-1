@@ -50,4 +50,6 @@ public:
     void displayCancellationHistory();
 };
 
+vector<Reservation> getReservations() const;
+
 #endif
