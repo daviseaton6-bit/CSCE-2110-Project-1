@@ -10,6 +10,7 @@
 #include "Display.h"
 #include "QueueNStack.h"
 #include "Sort.h"
+#include "report.h"
 
 using namespace std;
 
@@ -77,6 +78,7 @@ while (choice != 14)
         break;
 
     case 8:
+    {
         cout << "Remove Student from Waiting List selected.\n";
         string resourceID;
         cout << "Enter Resource ID: ";
@@ -95,6 +97,7 @@ while (choice != 14)
         }
 
         break;
+    }
 
     case 9:
         cout << "Display Waiting List selected.\n";
@@ -156,17 +159,7 @@ case 12:
     break;
 }
     case 13:
-        cout << "\n===== System Report =====\n";
-
-        cout << "Resources Loaded: "
-             << resources.size() << endl;
-
-        cout << "\nCurrent Waiting List:\n";
-        displayWaitingList(waitingList);
-
-        cout << "\nCancellation History:\n";
-        manager.displayCancellationHistory();
-
+        displayReport(manager, resources, waitingList);
         break;
 
     case 14:
