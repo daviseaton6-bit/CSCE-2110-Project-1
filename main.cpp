@@ -60,6 +60,7 @@ while (choice != 14)
 
     case 4:
         cout << "Cancel Reservation selected.\n";
+        //passes resources and waitinglist to allow for promotion
         manager.cancelReservation(resources, waitingList);
         break;
 
@@ -106,6 +107,7 @@ while (choice != 14)
         break;
 
     case 10:
+        //passes resources like case 4 to check if resource has a waiting list
         manager.undoCancellation(resources);
         break;
 
