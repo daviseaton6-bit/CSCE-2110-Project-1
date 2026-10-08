@@ -75,8 +75,8 @@ while (choice != 14)
         break;
 
     case 7:
-        cout << "Waiting List Information\n";
-        cout << "Students are automatically added when a resource is unavailable.\n";
+        cout << "=====Waiting List Information=====\n";
+        cout << "Students are automatically added when a resource is unavailable\n";
         break;
 
     case 8:
