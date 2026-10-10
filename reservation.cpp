@@ -134,7 +134,7 @@ void ReservationManager::viewReservations()
     }
 }
     //search for a reservation
-void ReservationManager::searchReservation(waitingList)
+void ReservationManager::searchReservation(const map<string, queue<Reservation>>& waitingList)
 {
     int reservationID;
 
@@ -167,7 +167,7 @@ void ReservationManager::searchReservation(waitingList)
             {
                 cout << "\nReservation Found( on waiting list for " << entry.first << ", position: " << position << ")\n";
                 temp.front().display();
-                
+                return;
             }   
             temp.pop();
             position++;
