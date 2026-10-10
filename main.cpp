@@ -71,7 +71,7 @@ while (choice != 14)
 
     case 6:
         cout << "Search Reservation selected.\n";
-        manager.searchReservation();
+        manager.searchReservation(waitingList);
         break;
 
     case 7:
