@@ -45,7 +45,7 @@ public:
     map<string, queue<Reservation>>& waitingList
 );
     void viewReservations();
-    void searchReservation();
+    void searchReservation(const map<string, queue<Reservation>>& waitingList);
     void cancelReservation(vector<Resource>& resources,
                            map<string, queue<Reservation>>& waitingList);
     void undoCancellation(vector<Resource>& resources);
