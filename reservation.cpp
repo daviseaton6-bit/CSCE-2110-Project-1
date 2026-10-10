@@ -134,7 +134,7 @@ void ReservationManager::viewReservations()
     }
 }
     //search for a reservation
-void ReservationManager::searchReservation()
+void ReservationManager::searchReservation(waitingList)
 {
     int reservationID;
 
@@ -155,7 +155,24 @@ void ReservationManager::searchReservation()
 
         current = current->next;
     }
+    //search waitinglist
+    for (const auto& entry: waitingList)
+    {
+        queue<Reservation> temp = entry.second; //copy queue so we can pop it
+        int position = 1;
 
+        while (!temp.empty())
+        {
+            if (temp.front().reservationID == reservationID)
+            {
+                cout << "\nReservation Found( on waiting list for " << entry.first << ", position: " << position << ")\n";
+                temp.front().display();
+                
+            }   
+            temp.pop();
+            position++;
+        }    
+    }
     cout << "Reservation not found.\n";
 }
 
