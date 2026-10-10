@@ -78,7 +78,7 @@ void ReservationManager::createReservation(
     getline(cin, resourceID);
 
     cout << "Enter Reservation Date: ";
-    getline(cin, reservationDate);
+    cin >> reservationDate; //fixes the bug that made you press enter twice after making a reservation
 
     Reservation newReservation;
 
